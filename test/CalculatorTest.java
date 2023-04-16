@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +10,11 @@ class CalculatorTest {
     @BeforeAll
     void setup(){
         cal = new Calculator();
+    }
+
+    @AfterEach
+    void reset(){
+        cal.reset();
     }
 
     @DisplayName("입력에 공백만 존재할 경우 0을 반환한다.")

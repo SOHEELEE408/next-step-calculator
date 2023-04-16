@@ -37,4 +37,9 @@ public class Calculator {
 
         return total;
     }
+
+    public void reset(){
+        this.total = 0;
+        this.customSeperator = null;
+    }
 }
