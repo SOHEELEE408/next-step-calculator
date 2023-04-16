@@ -1,48 +1,56 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class Calculator {
 
-    private String customSeperator;
     private int total;
+    private Pattern pattern = Pattern.compile("//(.)\n(.*)");
+
+    public void reset(){
+        total = 0;
+    }
 
     public int add(String input){
-        Matcher m = Pattern.compile("//(.)\n(.*)").matcher(input);
+        if(isZero(input)) return 0;
 
-        if(input.isBlank() || input == null)
-            return 0;
+        List<Integer> nums = getNums(input);
 
-
-        if(m.find()) {
-            customSeperator = m.group(1);
-            input = m.group(2);
-        }
-
-        Arrays.stream(input.split(",|:")).forEach(s -> {
-            if(customSeperator != null)
-                total += Arrays.stream(s.split(Pattern.quote(customSeperator))).mapToInt(value -> {
-                    int intValue = Integer.parseInt(value);
-
-                    if(intValue < 0) throw new IllegalArgumentException();
-
-                    return intValue;
-                }).sum();
-            else {
-                int intValue = Integer.parseInt(s);
-
-                if(intValue < 0) throw new IllegalArgumentException();
-
-                total += intValue;
-            }
-        });
+        nums.forEach(num -> total+=num);
 
         return total;
     }
 
-    public void reset(){
-        this.total = 0;
-        this.customSeperator = null;
+    private boolean isZero(String input){
+        if(input.isBlank() || input == null)
+            return true;
+
+        return false;
+    }
+
+    private List<Integer> getNums(String input){
+        List<String> datas = getSeperatorRegexAndNums(input);
+
+        return Arrays.stream(datas.get(1).split(datas.get(0)))
+                .map(value -> {
+                    int n = Integer.parseInt(value);
+                    checkNegative(n);
+                    return n;
+                }).collect(Collectors.toList());
+    }
+
+    private List<String> getSeperatorRegexAndNums(String input){
+        Matcher matcher = pattern.matcher(input);
+        if(matcher.find())
+            return List.of(",|:|" + Pattern.quote(matcher.group(1)), matcher.group(2));
+
+        return List.of(",|:", input);
+    }
+
+    private void checkNegative(int value){
+        if(value < 0) throw new IllegalArgumentException();
     }
 }
