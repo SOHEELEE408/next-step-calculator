@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -8,13 +9,15 @@ public class Calculator {
     private int total;
 
     public int add(String input){
+        Matcher m = Pattern.compile("//(.)\n(.*)").matcher(input);
 
         if(input.isBlank() || input == null)
             return 0;
 
-        if(input.contains("//") && input.contains("\n")) {
-            customSeperator = String.valueOf(input.charAt(2));
-            input = input.substring(4);
+
+        if(m.find()) {
+            customSeperator = m.group(1);
+            input = m.group(2);
         }
 
         Arrays.stream(input.split(",|:")).forEach(s -> {
