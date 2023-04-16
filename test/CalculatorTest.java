@@ -56,12 +56,26 @@ class CalculatorTest {
 
     }
     
-    @DisplayName("'//'와 '\n' 사이에 오는 문자는 구분자로 적용된다.")
+    @DisplayName("'//'와 '\\n' 사이에 오는 문자는 구분자로 적용된다.")
     @Test
     void customSeperatorTest() {
         // given
         String input = "//#\n2#3#4";
         
+        // when
+        int result = cal.add(input);
+
+        // then
+        assertEquals(9, result);
+        
+    }
+    
+    @DisplayName("정규식의 특수문자를 구분자로 적용할 수 있다.")
+    @Test
+    void customSeperatorIsMetacharacter() {
+        // given
+        String input = "//*\n2*3*4";
+
         // when
         int result = cal.add(input);
 
