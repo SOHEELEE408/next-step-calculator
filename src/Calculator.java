@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 
 public class Calculator {
@@ -19,7 +20,7 @@ public class Calculator {
         Arrays.stream(input.split(",")).forEach(s -> {
             Arrays.stream(s.split(":")).forEach(ss -> {
                 if(customSeperator != null)
-                    total += Arrays.stream(ss.split(customSeperator)).mapToInt(value -> {
+                    total += Arrays.stream(ss.split(Pattern.quote(customSeperator))).mapToInt(value -> {
                         int intValue = Integer.parseInt(value);
 
                         if(intValue < 0) throw new IllegalArgumentException();
