@@ -40,32 +40,3 @@ public class Calculator {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-private List<Integer> inputss;
-
-
- */
