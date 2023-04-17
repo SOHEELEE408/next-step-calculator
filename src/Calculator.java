@@ -1,48 +1,54 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class Calculator {
-
-    private String customSeperator;
-    private int total;
+    private Pattern pattern = Pattern.compile("//(.)\n(.*)");
 
     public int add(String input){
-        Matcher m = Pattern.compile("//(.)\n(.*)").matcher(input);
+        if(isBlank(input)) return 0;
 
-        if(input.isBlank() || input == null)
-            return 0;
-
-
-        if(m.find()) {
-            customSeperator = m.group(1);
-            input = m.group(2);
-        }
-
-        Arrays.stream(input.split(",|:")).forEach(s -> {
-            if(customSeperator != null)
-                total += Arrays.stream(s.split(Pattern.quote(customSeperator))).mapToInt(value -> {
-                    int intValue = Integer.parseInt(value);
-
-                    if(intValue < 0) throw new IllegalArgumentException();
-
-                    return intValue;
-                }).sum();
-            else {
-                int intValue = Integer.parseInt(s);
-
-                if(intValue < 0) throw new IllegalArgumentException();
-
-                total += intValue;
-            }
-        });
-
-        return total;
+        return sum(toIntegers(split(input)));
     }
 
-    public void reset(){
-        this.total = 0;
-        this.customSeperator = null;
+    private boolean isBlank(String input){
+        if(input.isBlank() || input == null)
+            return true;
+
+        return false;
+    }
+    
+    private List<Integer> toIntegers(String[] values){
+        return Arrays.stream(values).map(value -> toPositive(value)).collect(Collectors.toList());
+    }
+
+    private Integer toPositive(String value){
+        int n = Integer.parseInt(value);
+        if(n < 0) throw new IllegalArgumentException();
+
+        return n;
+    }
+
+    private String[] split(String input) {
+        Matcher matcher = pattern.matcher(input);
+        if(matcher.find()) {
+            String customSeparater = Pattern.quote(matcher.group(1));
+            return matcher.group(2).split(",|:|" + customSeparater);
+        }
+
+        return input.split(",|:");
+    }
+
+    private int sum(List<Integer> nums){
+        int total = 0;
+
+        for(Integer num : nums){
+            total += num;
+        }
+
+        return total;
     }
 }
