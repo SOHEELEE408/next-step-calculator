@@ -15,7 +15,7 @@ public class Calculator {
     }
 
     public int add(String input){
-        if(isZero(input)) return 0;
+        if(isBlank(input)) return 0;
 
         List<Integer> nums = getNums(input);
 
@@ -24,7 +24,7 @@ public class Calculator {
         return total;
     }
 
-    private boolean isZero(String input){
+    private boolean isBlank(String input){
         if(input.isBlank() || input == null)
             return true;
 
