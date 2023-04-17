@@ -22,11 +22,14 @@ public class Calculator {
     }
     
     private List<Integer> toIntegers(String[] values){
-        return Arrays.stream(values).map(value -> {
-            int n = Integer.parseInt(value);
-            if(n < 0) throw new IllegalArgumentException();
-            return n;
-        }).collect(Collectors.toList());
+        return Arrays.stream(values).map(value -> toPositive(value)).collect(Collectors.toList());
+    }
+
+    private Integer toPositive(String value){
+        int n = Integer.parseInt(value);
+        if(n < 0) throw new IllegalArgumentException();
+
+        return n;
     }
 
     private String[] split(String input) {
