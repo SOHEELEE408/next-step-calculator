@@ -6,51 +6,49 @@ import java.util.stream.Collectors;
 
 
 public class Calculator {
-
-    private int total;
     private Pattern pattern = Pattern.compile("//(.)\n(.*)");
 
-    public void reset(){
-        total = 0;
-    }
-
     public int add(String input){
-        if(isZero(input)) return 0;
+        if(isBlank(input)) return 0;
 
-        List<Integer> nums = getNums(input);
-
-        nums.forEach(num -> total+=num);
-
-        return total;
+        return sum(toIntegers(split(input)));
     }
 
-    private boolean isZero(String input){
+    private boolean isBlank(String input){
         if(input.isBlank() || input == null)
             return true;
 
         return false;
     }
-
-    private List<Integer> getNums(String input){
-        List<String> datas = getSeperatorRegexAndNums(input);
-
-        return Arrays.stream(datas.get(1).split(datas.get(0)))
-                .map(value -> {
-                    int n = Integer.parseInt(value);
-                    checkNegative(n);
-                    return n;
-                }).collect(Collectors.toList());
+    
+    private List<Integer> toIntegers(String[] values){
+        return Arrays.stream(values).map(value -> toPositive(value)).collect(Collectors.toList());
     }
 
-    private List<String> getSeperatorRegexAndNums(String input){
+    private Integer toPositive(String value){
+        int n = Integer.parseInt(value);
+        if(n < 0) throw new IllegalArgumentException();
+
+        return n;
+    }
+
+    private String[] split(String input) {
         Matcher matcher = pattern.matcher(input);
-        if(matcher.find())
-            return List.of(",|:|" + Pattern.quote(matcher.group(1)), matcher.group(2));
+        if(matcher.find()) {
+            String customSeparater = Pattern.quote(matcher.group(1));
+            return matcher.group(2).split(",|:|" + customSeparater);
+        }
 
-        return List.of(",|:", input);
+        return input.split(",|:");
     }
 
-    private void checkNegative(int value){
-        if(value < 0) throw new IllegalArgumentException();
+    private int sum(List<Integer> nums){
+        int total = 0;
+
+        for(Integer num : nums){
+            total += num;
+        }
+
+        return total;
     }
 }
