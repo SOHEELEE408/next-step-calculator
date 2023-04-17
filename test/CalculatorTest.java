@@ -12,11 +12,6 @@ class CalculatorTest {
         cal = new Calculator();
     }
 
-    @AfterEach
-    void reset(){
-        cal.reset();
-    }
-
     @DisplayName("입력에 공백만 존재할 경우 0을 반환한다.")
     @Test
     void blankReturnZeroTest() {

@@ -6,20 +6,17 @@ import java.util.stream.Collectors;
 
 
 public class Calculator {
-
-    private int total;
     private Pattern pattern = Pattern.compile("//(.)\n(.*)");
-
-    public void reset(){
-        total = 0;
-    }
 
     public int add(String input){
         if(isBlank(input)) return 0;
 
         List<Integer> nums = getNums(input);
 
-        nums.forEach(num -> total+=num);
+        int total = 0;
+        for(Integer num : nums){
+            total += num;
+        }
 
         return total;
     }
